@@ -1,12 +1,14 @@
 from dotenv import load_dotenv
 import os
 import discord
+from log import log
 
-print("Script started.")
+print("Script started. See ./log/bot.log")
+log("Script started.")
 
 load_dotenv()
 
-# print(os.environ.get("DISCORD_TOKEN"))
+# log(os.environ.get("DISCORD_TOKEN"))
 
 TOKEN = os.environ.get("DISCORD_TOKEN")
 ROLE = int(os.environ.get("DISCORD_VOL_ROLE"))
@@ -19,7 +21,7 @@ client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
-    print(f"Logged in as {client.user}")
+    log(f"Logged in as {client.user}")
 
 
 @client.event
@@ -27,17 +29,17 @@ async def on_ready():
 async def on_message(message):
     if str(message.channel.name) == "自己紹介記入":
         member = message.author
-        print(member.name)
+        log(member.name)
         role = member.guild.get_role(ROLE)
         roles_now = member.roles
         flag = 0
         for x in roles_now:
             if str(x) == "メンバー" or str(x) == "管理者":
-                print("He already has member role.")
+                log("He already has member role.")
                 flag += 1
         if flag == 0:
-            print("Adding role member...")
+            log("Adding role member...")
             await member.add_roles(role)
-            print("Added role.")
+            log("Added role.")
 
 client.run(TOKEN)
